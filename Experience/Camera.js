@@ -35,7 +35,18 @@ export default class Camera {
       -100,
       100
     );
+
     this.scene.add(this.orthographicCamera);
+
+    // Grid helper
+    const size = 20;
+    const divisions = 20;
+    const gridHelper = new THREE.GridHelper(size, divisions);
+    this.scene.add(gridHelper);
+
+    // Axis helper
+    const axesHelper = new THREE.AxesHelper(10);
+    this.scene.add(axesHelper);
   }
 
   setOrbitControls() {

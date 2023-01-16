@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import Experience from '../Experience';
 
 import Room from './Room';
-import Environment from './Emvironment';
+import Environment from './Environment';
 
 export default class World {
   constructor() {
@@ -21,5 +21,9 @@ export default class World {
 
   resize() {}
 
-  update() {}
+  update() {
+    if (this.room) {
+      this.room.update();
+    }
+  }
 }
