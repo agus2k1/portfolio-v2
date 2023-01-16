@@ -20,13 +20,13 @@ export default class Environment {
     this.sunLight.position.set(-2, 7, 3);
     this.scene.add(this.sunLight);
 
-    // Camera Helper
-    // const helper = new THREE.CameraHelper(this.sunLight.shadow.camera);
-    // this.scene.add(helper);
-
     // Ambient Light
     this.ambientLight = new THREE.AmbientLight('#ffffff', 2);
     this.scene.add(this.ambientLight);
+
+    // Camera Helper
+    // const helper = new THREE.CameraHelper(this.sunLight.shadow.camera);
+    // this.scene.add(helper);
   }
 
   resize() {}
