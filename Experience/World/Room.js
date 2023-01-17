@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Experience from '../Experience';
 import GSAP from 'gsap';
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper';
 
 export default class Room {
   constructor() {
@@ -50,8 +51,26 @@ export default class Room {
       }
     });
 
+    // FishTank Light
+    const width = 0.8;
+    const height = 0.5;
+    const intensity = 3;
+    const rectLight = new THREE.RectAreaLight(
+      0xffffff,
+      intensity,
+      width,
+      height
+    );
+
+    rectLight.position.set(4, 4, -1.5);
+    rectLight.rotation.x = -Math.PI / 2;
+    rectLight.rotation.z = Math.PI / 4;
+    this.actualRoom.add(rectLight);
+    // const rectLightHelper = new RectAreaLightHelper(rectLight);
+    // rectLight.add(rectLightHelper);
+
     this.scene.add(this.actualRoom);
-    this.actualRoom.scale.set(0.3, 0.3, 0.3);
+    this.actualRoom.scale.set(0.27, 0.27, 0.27);
   }
 
   setAnimation() {
