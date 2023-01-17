@@ -1,14 +1,12 @@
 import * as THREE from 'three';
-
 import Camera from './Camera';
 import Renderer from './Renderer';
-
 import Sizes from './Utils/Sizes';
 import Time from './Utils/Time';
 import Resources from './Utils/Resources';
 import assets from './Utils/assets';
-
 import World from './World/World';
+import Theme from './Theme';
 
 export default class Experience {
   static instance;
@@ -24,6 +22,7 @@ export default class Experience {
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.resources = new Resources(assets);
+    this.theme = new Theme();
     this.world = new World();
 
     // Screen resize
