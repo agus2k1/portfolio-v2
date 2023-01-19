@@ -51,10 +51,10 @@ export default class Room {
       }
     });
 
-    // FishTank Light
+    // Fishtank Light
     const width = 0.8;
     const height = 0.5;
-    const intensity = 3;
+    const intensity = 4;
     const rectLight = new THREE.RectAreaLight(
       0xffffff,
       intensity,
@@ -62,13 +62,14 @@ export default class Room {
       height
     );
 
-    rectLight.position.set(4, 4, -1.5);
+    rectLight.position.set(4, 4.2, -1);
     rectLight.rotation.x = -Math.PI / 2;
     rectLight.rotation.z = Math.PI / 4;
     this.actualRoom.add(rectLight);
     // const rectLightHelper = new RectAreaLightHelper(rectLight);
     // rectLight.add(rectLightHelper);
 
+    // Blender room
     this.scene.add(this.actualRoom);
     this.actualRoom.scale.set(0.27, 0.27, 0.27);
   }
