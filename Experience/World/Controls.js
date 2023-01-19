@@ -25,9 +25,11 @@ export default class Controls {
   setScrollTrigger() {
     let mm = gsap.matchMedia();
 
+    // Desktop Version
     mm.add('(min-width: 969px)', () => {
       // Resets
       this.room.scale.set(0.27, 0.27, 0.27);
+      this.room.position.set(0, 0, 0);
       this.fishtankLight.width = 0.8;
       this.fishtankLight.height = 0.5;
 
@@ -95,9 +97,10 @@ export default class Controls {
       y: -1,
     });
 
+    // Mobile Version
     mm.add('(max-width: 968px)', () => {
       // Resets
-      this.room.scale.set(0.23, 0.23, 0.23);
+      this.room.scale.set(0.2, 0.2, 0.2);
       this.room.position.set(0, 0, 0);
 
       // First section
@@ -110,9 +113,9 @@ export default class Controls {
           invalidateOnRefresh: true,
         },
       }).to(this.room.scale, {
-        x: 0.3,
-        y: 0.3,
-        z: 0.3,
+        x: 0.23,
+        y: 0.23,
+        z: 0.23,
       });
 
       // Second section
@@ -128,17 +131,17 @@ export default class Controls {
         .to(
           this.room.scale,
           {
-            x: 0.9,
-            y: 0.9,
-            z: 0.9,
+            x: 0.8,
+            y: 0.8,
+            z: 0.8,
           },
           'same'
         )
         .to(
-          this.camera.orthographicCamera.position,
+          this.room.position,
           {
-            x: -3,
-            y: 6.1,
+            x: () => 3,
+            z: () => this.sizes.height * 0.0032,
           },
           'same'
         );
@@ -155,8 +158,8 @@ export default class Controls {
       }).to(
         this.camera.orthographicCamera.position,
         {
-          x: -2.45,
-          y: 0,
+          x: 1,
+          y: -1,
         },
         'same'
       );
