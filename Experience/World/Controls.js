@@ -18,6 +18,11 @@ export default class Controls {
         this.fishtankLight = child;
       }
     });
+
+    this.circleFirst = this.experience.world.floor.circleFirst;
+    this.circleSecond = this.experience.world.floor.circleSecond;
+    this.circleThird = this.experience.world.floor.circleThird;
+
     gsap.registerPlugin(ScrollTrigger);
 
     this.setSmoothScroll();
@@ -138,22 +143,34 @@ export default class Controls {
         }
 
         // First Move Modifiers
-        let firstTargets = isDesktop ? this.room.position : this.room.scale;
-        let firstChanges = {
-          x: isDesktop ? () => this.sizes.width * 0.002 : 0.23,
-          y: isDesktop ? '' : 0.23,
-          z: isDesktop ? '' : 0.23,
-        };
+        let firstTargets = [
+          isDesktop ? this.room.position : this.room.scale,
+          this.circleFirst.scale,
+        ];
+        let firstChanges = [
+          {
+            x: isDesktop ? () => this.sizes.width * 0.002 : 0.23,
+            y: isDesktop ? '' : 0.23,
+            z: isDesktop ? '' : 0.23,
+          },
+          {
+            x: 3,
+            y: 3,
+            z: 3,
+          },
+        ];
 
         // Second Move Modifiers
         let secondTargets = [
           this.room.position,
           this.room.scale,
           this.fishtankLight,
+          this.circleSecond.scale,
         ];
         let secondChanges = [
           {
             x: () => (isDesktop ? 1 : 3),
+            y: 0.2,
             z: () => this.sizes.height * 0.0032,
           },
           {
@@ -165,14 +182,29 @@ export default class Controls {
             width: () => (isDesktop ? 0.8 * 4 : 0.8 * 3),
             height: () => (isDesktop ? 0.5 * 4 : 0.5 * 3),
           },
+          {
+            x: 3,
+            y: 3,
+            z: 3,
+          },
         ];
 
         // Third Move Modifiers
-        let thirdTargets = this.camera.orthographicCamera.position;
-        let thirdChanges = {
-          x: () => (isDesktop ? -4.1 : 1),
-          y: () => (isDesktop ? -1 : -1),
-        };
+        let thirdTargets = [
+          this.camera.orthographicCamera.position,
+          this.circleThird.scale,
+        ];
+        let thirdChanges = [
+          {
+            x: () => (isDesktop ? -4.1 : 1),
+            y: () => (isDesktop ? -1 : -1),
+          },
+          {
+            x: 3,
+            y: 3,
+            z: 3,
+          },
+        ];
 
         // First section
         this.firstMoveTimeline = new gsap.timeline({
@@ -183,7 +215,9 @@ export default class Controls {
             scrub: 0.6,
             invalidateOnRefresh: true,
           },
-        }).to(firstTargets, firstChanges);
+        })
+          .to(firstTargets[0], firstChanges[0], 'same')
+          .to(firstTargets[1], firstChanges[1], 'same');
 
         // Second section
         this.secondMoveTimeline = new gsap.timeline({
@@ -197,7 +231,8 @@ export default class Controls {
         })
           .to(secondTargets[0], secondChanges[0], 'same')
           .to(secondTargets[1], secondChanges[1], 'same')
-          .to(secondTargets[2], secondChanges[2], 'same');
+          .to(secondTargets[2], secondChanges[2], 'same')
+          .to(secondTargets[3], secondChanges[3], 'same');
 
         // Third section
         this.secondPartTimeline = new gsap.timeline({
@@ -208,7 +243,9 @@ export default class Controls {
             scrub: 0.6,
             invalidateOnRefresh: true,
           },
-        }).to(thirdTargets, thirdChanges);
+        })
+          .to(thirdTargets[0], thirdChanges[0], 'same')
+          .to(thirdTargets[1], thirdChanges[1], 'same');
 
         // Blender Objects Animations
         console.log(this.room.children);
