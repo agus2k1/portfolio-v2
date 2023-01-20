@@ -49,6 +49,24 @@ export default class Room {
           map: this.resources.items.screen,
         });
       }
+
+      if (child.name === 'Mini_floor') {
+        child.position.x = -1.42343;
+        child.position.z = 4.35417;
+      }
+
+      if (
+        child.name === 'Mail_box' ||
+        child.name === 'Lantern' ||
+        child.name === 'Flower1' ||
+        child.name === 'Flower2' ||
+        child.name === 'Dirt' ||
+        child.name === 'Floor1' ||
+        child.name === 'Floor2' ||
+        child.name === 'Floor3'
+      ) {
+        child.scale.set(0, 0, 0);
+      }
     });
 
     // Fishtank Light
