@@ -11,6 +11,7 @@ export default class Room {
     this.time = this.experience.time;
     this.room = this.resources.items.room;
     this.actualRoom = this.room.scene;
+    this.roomChildren = {};
 
     this.lerp = {
       current: 0,
@@ -55,18 +56,28 @@ export default class Room {
         child.position.z = 4.35417;
       }
 
-      if (
-        child.name === 'Mail_box' ||
-        child.name === 'Lantern' ||
-        child.name === 'Flower1' ||
-        child.name === 'Flower2' ||
-        child.name === 'Dirt' ||
-        child.name === 'Floor1' ||
-        child.name === 'Floor2' ||
-        child.name === 'Floor3'
-      ) {
-        child.scale.set(0, 0, 0);
+      // if (
+      //   child.name === 'Mail_box' ||
+      //   child.name === 'Lantern' ||
+      //   child.name === 'Flower1' ||
+      //   child.name === 'Flower2' ||
+      //   child.name === 'Dirt' ||
+      //   child.name === 'Floor1' ||
+      //   child.name === 'Floor2' ||
+      //   child.name === 'Floor3'
+      // ) {
+      //   child.scale.set(0, 0, 0);
+      // }
+
+      child.scale.set(0, 0, 0);
+
+      if (child.name === 'Cube') {
+        // child.scale.set(1, 1, 1);
+        child.position.set(0, 0.3, 0);
+        child.rotation.y = -Math.PI / 4;
       }
+
+      this.roomChildren[child.name.toLowerCase()] = child;
     });
 
     // Fishtank Light
@@ -86,6 +97,8 @@ export default class Room {
     this.actualRoom.add(rectLight);
     // const rectLightHelper = new RectAreaLightHelper(rectLight);
     // rectLight.add(rectLightHelper);
+
+    this.roomChildren['rectLight'] = rectLight;
 
     // Blender room
     this.scene.add(this.actualRoom);
