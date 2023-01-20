@@ -37,7 +37,7 @@ export default class Environment {
     this.sunLight.shadow.camera.far = 20;
     this.sunLight.shadow.mapSize.set(2048, 2048);
     this.sunLight.shadow.normalBias = 0.05;
-    this.sunLight.position.set(-2, 7, 3);
+    this.sunLight.position.set(-2, 5, 3);
     this.scene.add(this.sunLight);
 
     // Ambient Light
