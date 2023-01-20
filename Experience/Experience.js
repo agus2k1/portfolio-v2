@@ -7,6 +7,7 @@ import Resources from './Utils/Resources';
 import assets from './Utils/assets';
 import World from './World/World';
 import Theme from './Theme';
+import Preloader from './Preloader';
 
 export default class Experience {
   static instance;
@@ -24,6 +25,7 @@ export default class Experience {
     this.resources = new Resources(assets);
     this.theme = new Theme();
     this.world = new World();
+    this.preloader = new Preloader();
 
     // Screen resize
     this.sizes.on('resize', () => {
