@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import Experience from '../Experience';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import ASScroll from '@ashthornton/asscroll';
 
 export default class Controls {
   constructor() {
@@ -19,7 +20,56 @@ export default class Controls {
     });
     gsap.registerPlugin(ScrollTrigger);
 
+    this.setSmoothScroll();
     this.setScrollTrigger();
+  }
+
+  setupASScroll() {
+    const asscroll = new ASScroll({
+      disableRaf: true,
+      ease: 0.3,
+    });
+
+    gsap.ticker.add(asscroll.update);
+
+    ScrollTrigger.defaults({
+      scroller: asscroll.containerElement,
+    });
+
+    ScrollTrigger.scrollerProxy(asscroll.containerElement, {
+      scrollTop(value) {
+        if (arguments.length) {
+          asscroll.currentPos = value;
+          return;
+        }
+        return asscroll.currentPos;
+      },
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+      fixedMarkers: true,
+    });
+
+    asscroll.on('update', ScrollTrigger.update);
+    ScrollTrigger.addEventListener('refresh', asscroll.resize);
+
+    requestAnimationFrame(() => {
+      asscroll.enable({
+        newScrollElements: document.querySelectorAll(
+          '.gsap-marker-start, .gsap-marker-end, [asscroll]'
+        ),
+      });
+    });
+    return asscroll;
+  }
+
+  setSmoothScroll() {
+    this.asscroll = this.setupASScroll();
   }
 
   setScrollTrigger() {
@@ -32,6 +82,49 @@ export default class Controls {
       },
       (context) => {
         let { isDesktop, isMobile } = context.conditions;
+
+        this.sections = document.querySelectorAll('.section');
+        this.sections.forEach((section) => {
+          if (section.classList.contains('right')) {
+            gsap.to(section, {
+              borderTopLeftRadius: 10,
+              scrollTrigger: {
+                trigger: section,
+                start: 'top bottom',
+                end: 'top top',
+                scrub: 0.6,
+              },
+            });
+            gsap.to(section, {
+              borderBottomLeftRadius: 700,
+              scrollTrigger: {
+                trigger: section,
+                start: 'bottom bottom',
+                end: 'bottom top',
+                scrub: 0.6,
+              },
+            });
+          } else {
+            gsap.to(section, {
+              borderTopRightRadius: 10,
+              scrollTrigger: {
+                trigger: section,
+                start: 'top bottom',
+                end: 'top top',
+                scrub: 0.6,
+              },
+            });
+            gsap.to(section, {
+              borderBottomRightRadius: 700,
+              scrollTrigger: {
+                trigger: section,
+                start: 'bottom bottom',
+                end: 'bottom top',
+                scrub: 0.6,
+              },
+            });
+          }
+        });
 
         // Resets
         if (isDesktop) {
@@ -107,7 +200,7 @@ export default class Controls {
           .to(secondTargets[2], secondChanges[2], 'same');
 
         // Third section
-        this.thirdMoveTimeline = new gsap.timeline({
+        this.secondPartTimeline = new gsap.timeline({
           scrollTrigger: {
             trigger: '.third-move',
             start: 'top top',
@@ -116,6 +209,101 @@ export default class Controls {
             invalidateOnRefresh: true,
           },
         }).to(thirdTargets, thirdChanges);
+
+        // Blender Objects Animations
+        console.log(this.room.children);
+
+        this.room.children.forEach((child) => {
+          if (child.name === 'Mini_floor') {
+            this.first = gsap.to(child.position, {
+              x: -2.82343,
+              z: 5.75421,
+              duration: 0.3,
+            });
+          }
+          if (child.name === 'Mail_box') {
+            this.second = gsap.to(child.scale, {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 0.3,
+              ease: 'back.out(2)',
+            });
+          }
+          if (child.name === 'Lantern') {
+            this.third = gsap.to(child.scale, {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 0.3,
+              ease: 'back.out(2)',
+            });
+          }
+          if (child.name === 'Dirt') {
+            this.fourth = gsap.to(child.scale, {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 0.3,
+              ease: 'back.out(2)',
+            });
+          }
+          if (child.name === 'Flower1') {
+            this.fifth = gsap.to(child.scale, {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 0.3,
+              ease: 'back.out(2)',
+            });
+          }
+          if (child.name === 'Flower2') {
+            this.sixth = gsap.to(child.scale, {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 0.3,
+              ease: 'back.out(2)',
+            });
+          }
+          if (child.name === 'Floor1') {
+            this.seventh = gsap.to(child.scale, {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 0.3,
+              ease: 'back.out(2)',
+            });
+          }
+          if (child.name === 'Floor2') {
+            this.eighth = gsap.to(child.scale, {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 0.3,
+              ease: 'back.out(2)',
+            });
+          }
+          if (child.name === 'Floor3') {
+            this.ninth = gsap.to(child.scale, {
+              x: 1,
+              y: 1,
+              z: 1,
+              duration: 0.3,
+              ease: 'back.out(2)',
+            });
+          }
+        });
+
+        this.secondPartTimeline.add(this.first);
+        this.secondPartTimeline.add(this.second);
+        this.secondPartTimeline.add(this.third);
+        this.secondPartTimeline.add(this.fourth, '-=0.2');
+        this.secondPartTimeline.add(this.fifth, '-=0.2');
+        this.secondPartTimeline.add(this.sixth, '-=0.2');
+        this.secondPartTimeline.add(this.seventh, '-=0.2');
+        this.secondPartTimeline.add(this.eighth);
+        this.secondPartTimeline.add(this.ninth, '-=0.2');
       }
     );
   }
