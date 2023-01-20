@@ -12,6 +12,10 @@ body {
   color: var(--text-black);
 }
 
+body {
+  overflow: hidden;
+}
+
 section,
 h1,
 h3,
