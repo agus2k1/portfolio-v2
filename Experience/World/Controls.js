@@ -25,69 +25,225 @@ export default class Controls {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    this.setSmoothScroll();
+    document.querySelector('.page').style.overflow = 'visible';
+
+    // this.setSmoothScroll();
     this.setScrollTrigger();
   }
 
-  setupASScroll() {
-    const asscroll = new ASScroll({
-      disableRaf: true,
-      ease: 0.3,
-    });
+  // setupASScroll() {
+  //   const asscroll = new ASScroll({
+  //     ease: 0.3,
+  //     disableRaf: true,
+  //   });
 
-    gsap.ticker.add(asscroll.update);
+  //   gsap.ticker.add(asscroll.update);
 
-    ScrollTrigger.defaults({
-      scroller: asscroll.containerElement,
-    });
+  //   ScrollTrigger.defaults({
+  //     scroller: asscroll.containerElement,
+  //   });
 
-    ScrollTrigger.scrollerProxy(asscroll.containerElement, {
-      scrollTop(value) {
-        if (arguments.length) {
-          asscroll.currentPos = value;
-          return;
-        }
-        return asscroll.currentPos;
-      },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-      fixedMarkers: true,
-    });
+  //   ScrollTrigger.scrollerProxy(asscroll.containerElement, {
+  //     scrollTop(value) {
+  //       if (arguments.length) {
+  //         asscroll.currentPos = value;
+  //         return;
+  //       }
+  //       return asscroll.currentPos;
+  //     },
+  //     getBoundingClientRect() {
+  //       return {
+  //         top: 0,
+  //         left: 0,
+  //         width: window.innerWidth,
+  //         height: window.innerHeight,
+  //       };
+  //     },
+  //     fixedMarkers: true,
+  //   });
 
-    asscroll.on('update', ScrollTrigger.update);
-    ScrollTrigger.addEventListener('refresh', asscroll.resize);
+  //   asscroll.on('update', ScrollTrigger.update);
+  //   ScrollTrigger.addEventListener('refresh', asscroll.resize);
 
-    requestAnimationFrame(() => {
-      asscroll.enable({
-        newScrollElements: document.querySelectorAll(
-          '.gsap-marker-start, .gsap-marker-end, [asscroll]'
-        ),
-      });
-    });
-    return asscroll;
-  }
+  //   requestAnimationFrame(() => {
+  //     asscroll.enable({
+  //       newScrollElements: document.querySelectorAll(
+  //         '.gsap-marker-start, .gsap-marker-end, [asscroll]'
+  //       ),
+  //     });
+  //   });
+  //   return asscroll;
+  // }
 
-  setSmoothScroll() {
-    this.asscroll = this.setupASScroll();
-  }
+  // setSmoothScroll() {
+  //   this.asscroll = this.setupASScroll();
+  // }
 
   setScrollTrigger() {
-    let mm = gsap.matchMedia();
+    ScrollTrigger.matchMedia({
+      //Desktop
+      '(min-width: 969px)': () => {
+        // console.log("fired desktop");
 
-    mm.add(
-      {
-        isDesktop: `(min-width: 969px)`,
-        isMobile: `(max-width: 968px)`,
+        this.room.scale.set(0.27, 0.27, 0.27);
+        this.room.position.set(0, 0, 0);
+        this.fishtankLight.width = 0.8;
+        this.fishtankLight.height = 0.5;
+        this.camera.orthographicCamera.position.set(0, 6.7, 10);
+        // First section -----------------------------------------
+        this.firstMoveTimeline = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.first-move',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        });
+        this.firstMoveTimeline.fromTo(
+          this.room.position,
+          { x: 0, y: 0, z: 0 },
+          {
+            x: () => {
+              return this.sizes.width * 0.002;
+            },
+          }
+        );
+
+        // Second section -----------------------------------------
+        this.secondMoveTimeline = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.second-move',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        })
+          .to(
+            this.room.position,
+            {
+              x: () => 1,
+
+              y: () => 0.1,
+
+              z: () => this.sizes.height * 0.0032,
+            },
+            'same'
+          )
+          .to(
+            this.room.scale,
+            {
+              x: 0.92,
+              y: 0.92,
+              z: 0.92,
+            },
+            'same'
+          )
+          .to(
+            this.fishtankLight,
+            {
+              width: 0.8 * 4,
+              height: 0.5 * 4,
+            },
+            'same'
+          );
+
+        // Third section -----------------------------------------
+        this.thirdMoveTimeline = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.third-move',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        }).to(this.camera.orthographicCamera.position, {
+          x: -4.1,
+          y: 2,
+        });
       },
-      (context) => {
-        let { isDesktop, isMobile } = context.conditions;
 
+      // Mobile
+      '(max-width: 968px)': () => {
+        // console.log("fired mobile");
+
+        // Resets
+        this.room.scale.set(0.2, 0.2, 0.2);
+        this.room.position.set(0, 0, 0);
+        this.fishtankLight.width = 0.3; // Change
+        this.fishtankLight.height = 0.4; // Change
+        this.camera.orthographicCamera.position.set(0, 6.5, 10);
+
+        // First section -----------------------------------------
+        this.firstMoveTimeline = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.first-move',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.6,
+            // invalidateOnRefresh: true,
+          },
+        }).to(this.room.scale, {
+          x: 0.23,
+          y: 0.23,
+          z: 0.23,
+        });
+
+        // Second section -----------------------------------------
+        this.secondMoveTimeline = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.second-move',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        })
+          .to(
+            this.room.position,
+            {
+              x: 3,
+              y: 0.2,
+              z: () => this.sizes.height * 0.0032,
+            },
+            'same'
+          )
+          .to(
+            this.room.scale,
+            {
+              x: 0.8,
+              y: 0.8,
+              z: 0.8,
+            },
+            'same'
+          )
+          .to(
+            this.fishtankLight,
+            {
+              width: 0.8 * 3,
+              height: 0.5 * 3,
+            },
+            'same'
+          );
+
+        // Third section -----------------------------------------
+        this.thirdMoveTimeline = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.third-move',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        }).to(this.camera.orthographicCamera.position, {
+          x: 1.2,
+          y: 2,
+        });
+      },
+
+      // all
+      all: () => {
         this.sections = document.querySelectorAll('.section');
         this.sections.forEach((section) => {
           if (section.classList.contains('right')) {
@@ -131,124 +287,60 @@ export default class Controls {
           }
         });
 
-        // Resets
-        if (isDesktop) {
-          this.room.scale.set(0.27, 0.27, 0.27);
-          this.room.position.set(0, 0, 0);
-          this.fishtankLight.width = 0.8;
-          this.fishtankLight.height = 0.5;
-        } else if (isMobile) {
-          this.room.scale.set(0.2, 0.2, 0.2);
-          this.room.position.set(0, 0, 0);
-        }
-
-        // First Move Modifiers
-        let firstTargets = [
-          isDesktop ? this.room.position : this.room.scale,
-          this.circleFirst.scale,
-        ];
-        let firstChanges = [
-          {
-            x: isDesktop ? () => this.sizes.width * 0.002 : 0.23,
-            y: isDesktop ? '' : 0.23,
-            z: isDesktop ? '' : 0.23,
-          },
-          {
-            x: 3,
-            y: 3,
-            z: 3,
-          },
-        ];
-
-        // Second Move Modifiers
-        let secondTargets = [
-          this.room.position,
-          this.room.scale,
-          this.fishtankLight,
-          this.circleSecond.scale,
-        ];
-        let secondChanges = [
-          {
-            x: () => (isDesktop ? 1 : 3),
-            y: 0.2,
-            z: () => this.sizes.height * 0.0032,
-          },
-          {
-            x: () => (isDesktop ? 0.92 : 0.8),
-            y: () => (isDesktop ? 0.92 : 0.8),
-            z: () => (isDesktop ? 0.92 : 0.8),
-          },
-          {
-            width: () => (isDesktop ? 0.8 * 4 : 0.8 * 3),
-            height: () => (isDesktop ? 0.5 * 4 : 0.5 * 3),
-          },
-          {
-            x: 3,
-            y: 3,
-            z: 3,
-          },
-        ];
-
-        // Third Move Modifiers
-        let thirdTargets = [
-          this.camera.orthographicCamera.position,
-          this.circleThird.scale,
-        ];
-        let thirdChanges = [
-          {
-            x: () => (isDesktop ? -4.1 : 1),
-            y: () => (isDesktop ? -1 : -1),
-          },
-          {
-            x: 3,
-            y: 3,
-            z: 3,
-          },
-        ];
-
-        // First section
-        this.firstMoveTimeline = new gsap.timeline({
+        // Circle animations
+        // First section -----------------------------------------
+        this.firstCircle = new gsap.timeline({
           scrollTrigger: {
             trigger: '.first-move',
             start: 'top top',
             end: 'bottom bottom',
             scrub: 0.6,
-            invalidateOnRefresh: true,
           },
-        })
-          .to(firstTargets[0], firstChanges[0], 'same')
-          .to(firstTargets[1], firstChanges[1], 'same');
+        }).to(this.circleFirst.scale, {
+          x: 3,
+          y: 3,
+          z: 3,
+        });
 
-        // Second section
-        this.secondMoveTimeline = new gsap.timeline({
+        // Second section -----------------------------------------
+        this.secondCircle = new gsap.timeline({
           scrollTrigger: {
             trigger: '.second-move',
             start: 'top top',
             end: 'bottom bottom',
             scrub: 0.6,
-            invalidateOnRefresh: true,
           },
-        })
-          .to(secondTargets[0], secondChanges[0], 'same')
-          .to(secondTargets[1], secondChanges[1], 'same')
-          .to(secondTargets[2], secondChanges[2], 'same')
-          .to(secondTargets[3], secondChanges[3], 'same');
+        }).to(
+          this.circleSecond.scale,
+          {
+            x: 3,
+            y: 3,
+            z: 3,
+          },
+          'same'
+        );
 
-        // Third section
-        this.secondPartTimeline = new gsap.timeline({
+        // Third section -----------------------------------------
+        this.thirdCircle = new gsap.timeline({
           scrollTrigger: {
             trigger: '.third-move',
             start: 'top top',
             end: 'bottom bottom',
             scrub: 0.6,
-            invalidateOnRefresh: true,
           },
-        })
-          .to(thirdTargets[0], thirdChanges[0], 'same')
-          .to(thirdTargets[1], thirdChanges[1], 'same');
+        }).to(this.circleThird.scale, {
+          x: 3,
+          y: 3,
+          z: 3,
+        });
 
-        // Blender Objects Animations
-        console.log(this.room.children);
+        // Mini Platform Animations
+        this.secondPartTimeline = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.third-move',
+            start: 'center center',
+          },
+        });
 
         this.room.children.forEach((child) => {
           if (child.name === 'Mini_floor') {
@@ -331,7 +423,6 @@ export default class Controls {
             });
           }
         });
-
         this.secondPartTimeline.add(this.first);
         this.secondPartTimeline.add(this.second);
         this.secondPartTimeline.add(this.third);
@@ -340,11 +431,10 @@ export default class Controls {
         this.secondPartTimeline.add(this.sixth, '-=0.2');
         this.secondPartTimeline.add(this.seventh, '-=0.2');
         this.secondPartTimeline.add(this.eighth);
-        this.secondPartTimeline.add(this.ninth, '-=0.2');
-      }
-    );
+        this.secondPartTimeline.add(this.ninth, '-=0.1');
+      },
+    });
   }
-
   resize() {}
 
   update() {}
