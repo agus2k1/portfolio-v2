@@ -8,6 +8,11 @@ export default class Sizes extends EventEmitter {
     this.aspect = this.width / this.height;
     this.pixelRatio = Math.min(window.devicePixelRatio, 2);
     this.frustrum = 5;
+    if (this.width < 968) {
+      this.device = 'mobile';
+    } else {
+      this.device = 'desktop';
+    }
 
     window.addEventListener('resize', () => {
       this.width = window.innerWidth;
