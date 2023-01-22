@@ -5,9 +5,10 @@ import Sizes from './Utils/Sizes';
 import Time from './Utils/Time';
 import Resources from './Utils/Resources';
 import assets from './Utils/assets';
-import World from './World/World';
 import Theme from './Theme';
 import Preloader from './Preloader';
+import World from './World/World';
+import Controls from './World/Controls';
 
 export default class Experience {
   static instance;
@@ -26,6 +27,10 @@ export default class Experience {
     this.theme = new Theme();
     this.world = new World();
     this.preloader = new Preloader();
+
+    this.preloader.on('enablecontrols', () => {
+      this.controls = new Controls();
+    });
 
     // Screen resize
     this.sizes.on('resize', () => {
@@ -48,5 +53,6 @@ export default class Experience {
     this.camera.update();
     this.renderer.update();
     this.world.update();
+    this.preloader.update();
   }
 }
