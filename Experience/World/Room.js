@@ -73,7 +73,7 @@ export default class Room {
 
       if (child.name === 'Cube') {
         // child.scale.set(1, 1, 1);
-        child.position.set(0, 0.3, 0);
+        child.position.set(0, 3.5, 0);
         child.rotation.y = -Math.PI / 4;
       }
 
@@ -114,7 +114,7 @@ export default class Room {
     this.fishAnimation2 = this.mixer.clipAction(this.room.animations[7]);
     this.fishAnimation2.play();
 
-    console.log(this.room.animations);
+    // console.log(this.room.animations);
   }
 
   onMouseMove() {
