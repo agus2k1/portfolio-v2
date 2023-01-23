@@ -1,9 +1,12 @@
 export default function (element) {
-  element.style.display = 'none';
-  element.innerHtml = element.innerHTML
+  element.style.overflow = 'hidden';
+  element.innerHTML = element.innerText
     .split('')
     .map((char) => {
-      return `<span class="animated"></span>`;
+      if (char === ' ') {
+        return `<span>&nbsp;</span>`;
+      }
+      return `<span class="animated">${char}</span>`;
     })
     .join('');
 
