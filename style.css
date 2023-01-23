@@ -12,10 +12,6 @@ body {
   color: var(--text-black);
 }
 
-/* body {
-  overflow: hidden;
-} */
-
 section,
 h1,
 h3,
@@ -57,6 +53,28 @@ svg {
   --color-purple: var(--color-text-dark);
   --color-circle: var(--color-text-dark);
 }
+/* ---------------- Animations ---------------- */
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes loading {
+  0% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-12px);
+  }
+  40% {
+    transform: translateY(0);
+  }
+}
 
 /* ---------------- Experience ---------------- */
 
@@ -71,20 +89,67 @@ svg {
   height: 100%;
 }
 
+.hidden {
+  display: none;
+}
+
+/* ---------------- Preloader ---------------- */
+
+.preloader {
+  background-color: var(--color-background-light);
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  opacity: 1;
+  z-index: 99999999999999999;
+}
+
+.preloader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 6px;
+  background-color: var(--color-blue-light);
+  animation: loading 1.2s ease-in-out infinite;
+}
+
+.circle:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.circle:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
 /* ---------------- Page content ---------------- */
 
 .page {
   z-index: 99999;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
 }
 
 .page-wrapper {
   position: relative;
+  overflow: hidden;
 }
 
-/* ---------------- Preloader ---------------- */
+/* ---------------- Intro ---------------- */
 
 .animated {
   display: inline-block;
@@ -92,12 +157,26 @@ svg {
 }
 
 .intro-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
   font-size: 16px;
   font-weight: 500;
+  color: var(--color-text);
   transform: translate(-50%, -50%);
+}
+
+.arrow-wrapper {
+  position: absolute;
+  top: 90%;
+  left: 49%;
+  transform: translate(-50%, -50%);
+  animation: bounce 0.5s ease-in alternate infinite;
+  opacity: 0;
+  color: var(--color-text);
 }
 
 /* ---------------- Toggle bar ---------------- */
@@ -110,6 +189,7 @@ svg {
   top: 50px;
   right: 50px;
   z-index: 9999999;
+  opacity: 0;
 }
 
 .sun-wrapper,
@@ -334,5 +414,20 @@ svg {
 @media (max-width: 968px) {
   .section {
     width: 100%;
+  }
+  .hero-main {
+    bottom: 120px;
+  }
+  .hero-second {
+    top: 160px;
+  }
+  .hero-wrapper {
+    width: calc(100% - 60px);
+  }
+  .hero-main-title {
+    font-size: 32px;
+  }
+  .hero-main-description {
+    font-size: 14px;
   }
 }
