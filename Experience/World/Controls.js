@@ -27,64 +27,69 @@ export default class Controls {
 
     document.querySelector('.page').style.overflow = 'visible';
 
-    // this.setSmoothScroll();
+    if (
+      !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    ) {
+      this.setSmoothScroll();
+    }
+
     this.setScrollTrigger();
   }
 
-  // setupASScroll() {
-  //   const asscroll = new ASScroll({
-  //     ease: 0.3,
-  //     disableRaf: true,
-  //   });
+  setupASScroll() {
+    const asscroll = new ASScroll({
+      ease: 0.1,
+      disableRaf: true,
+    });
 
-  //   gsap.ticker.add(asscroll.update);
+    gsap.ticker.add(asscroll.update);
 
-  //   ScrollTrigger.defaults({
-  //     scroller: asscroll.containerElement,
-  //   });
+    ScrollTrigger.defaults({
+      scroller: asscroll.containerElement,
+    });
 
-  //   ScrollTrigger.scrollerProxy(asscroll.containerElement, {
-  //     scrollTop(value) {
-  //       if (arguments.length) {
-  //         asscroll.currentPos = value;
-  //         return;
-  //       }
-  //       return asscroll.currentPos;
-  //     },
-  //     getBoundingClientRect() {
-  //       return {
-  //         top: 0,
-  //         left: 0,
-  //         width: window.innerWidth,
-  //         height: window.innerHeight,
-  //       };
-  //     },
-  //     fixedMarkers: true,
-  //   });
+    ScrollTrigger.scrollerProxy(asscroll.containerElement, {
+      scrollTop(value) {
+        if (arguments.length) {
+          asscroll.currentPos = value;
+          return;
+        }
+        return asscroll.currentPos;
+      },
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+      fixedMarkers: true,
+    });
 
-  //   asscroll.on('update', ScrollTrigger.update);
-  //   ScrollTrigger.addEventListener('refresh', asscroll.resize);
+    asscroll.on('update', ScrollTrigger.update);
+    ScrollTrigger.addEventListener('refresh', asscroll.resize);
 
-  //   requestAnimationFrame(() => {
-  //     asscroll.enable({
-  //       newScrollElements: document.querySelectorAll(
-  //         '.gsap-marker-start, .gsap-marker-end, [asscroll]'
-  //       ),
-  //     });
-  //   });
-  //   return asscroll;
-  // }
+    requestAnimationFrame(() => {
+      asscroll.enable({
+        newScrollElements: document.querySelectorAll(
+          '.gsap-marker-start, .gsap-marker-end, [asscroll]'
+        ),
+      });
+    });
+    return asscroll;
+  }
 
-  // setSmoothScroll() {
-  //   this.asscroll = this.setupASScroll();
-  // }
+  setSmoothScroll() {
+    this.asscroll = this.setupASScroll();
+  }
 
   setScrollTrigger() {
     ScrollTrigger.matchMedia({
       //Desktop
       '(min-width: 969px)': () => {
-        // console.log("fired desktop");
-
         this.room.scale.set(0.27, 0.27, 0.27);
         this.room.position.set(0, 0, 0);
         this.fishtankLight.width = 0.8;
