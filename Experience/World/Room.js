@@ -73,7 +73,7 @@ export default class Room {
 
       if (child.name === 'Cube') {
         // child.scale.set(1, 1, 1);
-        child.position.set(0, 3.5, 0);
+        child.position.set(0, 0.4, 0);
         child.rotation.y = -Math.PI / 4;
       }
 
@@ -83,7 +83,7 @@ export default class Room {
     // Fishtank Light
     const width = 0.8;
     const height = 0.5;
-    const intensity = 4;
+    const intensity = 0;
     const rectLight = new THREE.RectAreaLight(
       0xffffff,
       intensity,
