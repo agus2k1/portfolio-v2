@@ -37,6 +37,15 @@ export default class Preloader extends EventEmitter {
   firstIntro() {
     return new Promise((resolve) => {
       this.timeline = new gsap.timeline();
+      this.timeline.set('.animated', { y: 0, yPercent: 100 });
+      this.timeline.to('.preloader', {
+        opacity: 0,
+        delay: 1,
+        onComplete: () => {
+          document.querySelector('.preloader').classList.add('hidden');
+        },
+      });
+
       if (this.device === 'desktop') {
         this.timeline
           .to(this.roomChildren.cube.scale, {
@@ -47,10 +56,9 @@ export default class Preloader extends EventEmitter {
             duration: 0.7,
           })
           .to(this.room.position, {
-            x: -1.3,
+            x: -1.35,
             ease: 'power1.out',
             duration: 0.7,
-            onComplete: resolve,
           });
       } else {
         this.timeline
@@ -62,26 +70,62 @@ export default class Preloader extends EventEmitter {
             duration: 0.7,
           })
           .to(this.room.position, {
-            y: -0.65,
-            z: -2.3,
+            z: -1.5,
             ease: 'power1.out',
             duration: 0.7,
-            onComplete: resolve,
           });
       }
+      this.timeline
+        .to('.intro-text .animated', {
+          yPercent: 0,
+          stagger: 0.05,
+          ease: 'back.out(1.7)',
+        })
+        .to(
+          '.arrow-wrapper',
+          {
+            opacity: 1,
+          },
+          'same'
+        )
+        .to(
+          '.toggle-bar',
+          {
+            opacity: 1,
+            onComplete: resolve,
+          },
+          'same'
+        );
     });
   }
 
   secondIntro() {
     return new Promise((resolve) => {
       this.secondTimeline = new gsap.timeline();
+
       this.secondTimeline
+        .to(
+          '.intro-text .animated',
+          {
+            yPercent: 100,
+            stagger: 0.05,
+            ease: 'back.in(1.7)',
+          },
+          'fadeout'
+        )
+        .to(
+          '.arrow-wrapper',
+          {
+            opacity: 0,
+          },
+          'fadeout'
+        )
         .to(
           this.room.position,
           {
             x: 0,
             y: 0,
-            z: 0,
+            z: 1.41,
             ease: 'power1.out',
           },
           'same'
@@ -116,46 +160,89 @@ export default class Preloader extends EventEmitter {
           y: 1,
           z: 1,
         })
-        .to(this.roomChildren.cube.scale, {
-          x: 0,
-          y: 0,
-          z: 0,
-        })
-        .to(this.roomChildren.aquarium.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          ease: 'back.out(2.2)',
-          duration: 0.5,
-        })
-        .to(this.roomChildren.clock.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          ease: 'back.out(2.2)',
-          duration: 0.5,
-        })
-        .to(this.roomChildren.shelves.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          ease: 'back.out(2.2)',
-          duration: 0.5,
-        })
-        .to(this.roomChildren.floor_things.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          ease: 'back.out(2.2)',
-          duration: 0.5,
-        })
-        .to(this.roomChildren.desks.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          ease: 'back.out(2.2)',
-          duration: 0.5,
-        })
+        .to(
+          this.roomChildren.cube.scale,
+          {
+            x: 0,
+            y: 0,
+            z: 0,
+            duration: 1,
+          },
+          'home-page'
+        )
+        .to(
+          '.hero-main-title .animated',
+          {
+            yPercent: 0,
+            stagger: 0.07,
+            ease: 'back.out(1.7)',
+          },
+          'home-page'
+        )
+        .to(
+          '.hero-main-description .animated',
+          {
+            yPercent: 0,
+            stagger: 0.05,
+            ease: 'back.out(1.7)',
+          },
+          'home-page'
+        )
+        .to(
+          this.roomChildren.aquarium.scale,
+          {
+            x: 1,
+            y: 1,
+            z: 1,
+            ease: 'back.out(2.2)',
+            duration: 0.5,
+          },
+          '>-1.0'
+        )
+        .to(
+          this.roomChildren.clock.scale,
+          {
+            x: 1,
+            y: 1,
+            z: 1,
+            ease: 'back.out(2.2)',
+            duration: 0.5,
+          },
+          '>-0.9'
+        )
+        .to(
+          this.roomChildren.shelves.scale,
+          {
+            x: 1,
+            y: 1,
+            z: 1,
+            ease: 'back.out(2.2)',
+            duration: 0.5,
+          },
+          '>-0.5'
+        )
+        .to(
+          this.roomChildren.floor_things.scale,
+          {
+            x: 1,
+            y: 1,
+            z: 1,
+            ease: 'back.out(2.2)',
+            duration: 0.5,
+          },
+          '>-0.7'
+        )
+        .to(
+          this.roomChildren.desks.scale,
+          {
+            x: 1,
+            y: 1,
+            z: 1,
+            ease: 'back.out(2.2)',
+            duration: 0.5,
+          },
+          '>-0.9'
+        )
         .to(this.roomChildren.table_stuff.scale, {
           x: 1,
           y: 1,
@@ -163,18 +250,17 @@ export default class Preloader extends EventEmitter {
           ease: 'back.out(2.2)',
           duration: 0.5,
         })
-        .to(this.roomChildren.computer.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          ease: 'back.out(2.2)',
-          duration: 0.5,
-        })
-        .to(this.roomChildren.mini_floor.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-        })
+        .to(
+          this.roomChildren.computer.scale,
+          {
+            x: 1,
+            y: 1,
+            z: 1,
+            ease: 'back.out(2.2)',
+            duration: 0.5,
+          },
+          '>-0.8'
+        )
         .to(
           this.roomChildren.chair.scale,
           {
@@ -192,10 +278,18 @@ export default class Preloader extends EventEmitter {
             y: Math.PI * 4 - Math.PI / 3,
             ease: 'power2.out',
             duration: 1,
-            onComplete: resolve,
           },
           'chair'
-        );
+        )
+        .to(this.roomChildren.mini_floor.scale, {
+          x: 1,
+          y: 1,
+          z: 1,
+        })
+        .to('.arrow-wrapper', {
+          opacity: 1,
+          onComplete: resolve,
+        });
     });
   }
 
@@ -246,13 +340,14 @@ export default class Preloader extends EventEmitter {
     await this.secondIntro();
     this.scaleFlag = false;
     this.emit('enablecontrols');
+    this.roomChildren.rectLight.intensity = 4;
   }
 
   move() {
     if (this.device === 'desktop') {
-      this.room.position.set(-1.3, 0, 0);
+      this.room.position.set(-1.35, 0, 0);
     } else {
-      this.room.position.set(0, -0.65, -2.3);
+      this.room.position.set(0, 0, -1.5);
     }
   }
 
