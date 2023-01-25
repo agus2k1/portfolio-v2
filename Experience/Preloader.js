@@ -19,7 +19,6 @@ export default class Preloader extends EventEmitter {
     });
 
     this.world.on('worldready', () => {
-      console.log('World');
       this.setAssets();
       this.playIntro();
     });
@@ -31,7 +30,7 @@ export default class Preloader extends EventEmitter {
     convert(document.querySelector('.hero-main-description'));
     this.room = this.experience.world.room.actualRoom;
     this.roomChildren = this.experience.world.room.roomChildren;
-    console.log(this.room);
+    // console.log(this.room);
   }
 
   firstIntro() {
@@ -296,7 +295,6 @@ export default class Preloader extends EventEmitter {
   // // on Desktop
   onScroll(e) {
     if (e.deltaY > 0) {
-      console.log('added event');
       this.removeEventListeners();
       this.playSecondIntro();
     }
