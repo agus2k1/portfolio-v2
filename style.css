@@ -31,6 +31,7 @@ svg {
   --color-purple-light: #c8a1e5;
   --color-green-light: #7ad0ac;
   --color-blue-light: #8395cd;
+  --color-blue-dark: #6d84c8;
   /* Dark theme colors */
   --color-text-dark: #faf4e5;
   --color-background-dark: #8395cd;
@@ -208,7 +209,7 @@ svg {
   align-items: center;
   width: 56px;
   height: 28px;
-  background-color: var(--color-blue-light);
+  background-color: var(--color-blue-dark);
   border-radius: 1000px;
   margin: 0 16px;
   border: none;
@@ -271,6 +272,12 @@ svg {
   padding: 20% 5%;
 }
 
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
 .section-heading {
   font-size: 18px;
   font-weight: 700;
@@ -279,10 +286,38 @@ svg {
   color: var(--color-text);
 }
 
+.section-icons {
+  display: flex;
+  gap: 20px;
+}
+
+.eye-icon,
+.github-icon {
+  color: var(--color-text);
+}
+
+.eye-icon:hover,
+.github-icon:hover {
+  cursor: pointer;
+}
+
+.logo {
+  width: 24px;
+  height: 24px;
+}
+
 .section-text {
   line-height: 2;
   margin-top: 18px;
   font-size: 16px;
+  color: var(--color-text);
+}
+
+.info {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.8;
+  margin-top: 64px;
   color: var(--color-text);
 }
 
