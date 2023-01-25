@@ -30,7 +30,6 @@ export default class Experience {
 
     this.preloader.on('enablecontrols', () => {
       this.controls = new Controls();
-      // document.querySelector('.page').style.overflow = 'visible';
     });
 
     // Screen resize
