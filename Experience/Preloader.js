@@ -261,6 +261,17 @@ export default class Preloader extends EventEmitter {
           '>-0.8'
         )
         .to(
+          this.roomChildren.chess.scale,
+          {
+            x: 0.04,
+            y: 0.04,
+            z: 0.04,
+            ease: 'back.out(2.2)',
+            duration: 0.5,
+          },
+          '>-0.7'
+        )
+        .to(
           this.roomChildren.chair.scale,
           {
             x: 1,
